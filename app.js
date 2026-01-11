@@ -8,6 +8,7 @@ const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust";
 const ejsMate=require("ejs-mate");
 const wrapAsync=require("./utils/wrapAsync.js")
 const ExpressError=require("./utils/ExpressError.js");
+const { listingSchema }=require("./schema.js");
 
 main().then(()=>{
     console.log("connected to DB");
@@ -53,8 +54,10 @@ app.get("/listings/:id", async (req,res)=>{
 
 //Create route
 app.post("/listings",wrapAsync(async (req,res,next)=>{
-    if(!req.body.listing){
-        throw new ExpressError(400,"Send Valid Data for Listing");
+    let result=listingSchema.validate(req.body);
+    console.log(result);
+    if(result.error){
+        throw new ExpressError(400,result.error);
     }
         const newListing=new Listing(req.body.listing);
     await newListing.save();

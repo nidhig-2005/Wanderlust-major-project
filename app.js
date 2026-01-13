@@ -99,7 +99,7 @@ app.put("/listings/:id",validateListing,wrapAsync(async(req,res)=>{
         throw new ExpressError(400,"Send Valid Data for Listing");
     }
     let {id}=req.params;
-    await Listing.findByIdAndUpdate(id,{...req.body.listing})
+    await Listing.findByIdAndUpdate(id,{...req.body.listing});
     res.redirect(`/listings/${id}`);
 }));
 
@@ -107,7 +107,7 @@ app.put("/listings/:id",validateListing,wrapAsync(async(req,res)=>{
 //delete route 
 app.delete("/listings/:id",wrapAsync(async(req,res)=>{
     let {id}=req.params;
-    await Listing.findByIdAndDelete(id,{...req.body.listing})
+    await Listing.findByIdAndDelete(id);
     res.redirect("/listings");
 }));
 
@@ -120,6 +120,14 @@ listing.reviews.push(newReview);
 await newReview.save();
 await listing.save();
 res.redirect(`/listings/${listing._id}`);
+}));
+
+//delete review route
+app.delete("/listings/:id/reviews/:reviewId",wrapAsync(async(req,res)=>{
+    let {id,reviewId}=req.params;
+    await Listing.findByIdAndUpdate(id,{$pull:{reviews:reviewId}});
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/listings/${id}`);
 }));
 
 // app.get("/testListing",async (req,res)=>{

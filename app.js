@@ -11,6 +11,7 @@ const ExpressError=require("./utils/ExpressError.js");
 const { listingSchema }=require("./schema.js");
 const Review=require("./models/review.js");
 const { reviewSchema }=require("./schema.js");
+const listings=require("./routes/listing.js");
 
 main().then(()=>{
     console.log("connected to DB");
@@ -59,57 +60,8 @@ const validateReview=(req,res,next)=>{
     }
 };
 
-//Index route
-app.get("/listings",async (req,res)=>{
-    const allListings=await Listing.find({});
-    res.render("listings/index.ejs",{allListings});
-    });
-
-//new route
-app.get("/listings/new",(req,res)=>{
-    res.render("listings/new.ejs");
-});
-
-// show route
-app.get("/listings/:id", async (req,res)=>{
-    let {id}=req.params;
-    const listing=await Listing.findById(id).populate("reviews");
-    res.render("listings/show.ejs",{listing});
-});
-
-
-//Create route
-app.post("/listings",validateListing,
-    wrapAsync(async (req,res,next)=>{
-        const newListing=new Listing(req.body.listing);
-    await newListing.save();
-    res.redirect("/listings");
-}));
-
-//edit route
-app.get("/listings/:id/edit",wrapAsync(async (req,res)=>{
-     let {id}=req.params;
-    const listing=await Listing.findById(id);
-    res.render("listings/edit.ejs",{listing});
-}));
-
-//update route
-app.put("/listings/:id",validateListing,wrapAsync(async(req,res)=>{
-     if(!req.body.listing){
-        throw new ExpressError(400,"Send Valid Data for Listing");
-    }
-    let {id}=req.params;
-    await Listing.findByIdAndUpdate(id,{...req.body.listing});
-    res.redirect(`/listings/${id}`);
-}));
-
-
-//delete route 
-app.delete("/listings/:id",wrapAsync(async(req,res)=>{
-    let {id}=req.params;
-    await Listing.findByIdAndDelete(id);
-    res.redirect("/listings");
-}));
+//listings 
+app.use("/listings",listings);
 
 //reviews
 //post route

@@ -9,7 +9,9 @@ const ExpressError=require("./utils/ExpressError.js");
 const listings=require("./routes/listing.js");
 const reviews=require("./routes/review.js");
 const session=require("express-session");
+const flash=require("connect-flash");
 
+//connect to mongoDB
 main().then(()=>{
     console.log("connected to DB");
 })
@@ -21,6 +23,7 @@ async function main(){
     await mongoose.connect(MONGO_URL);
 }
 
+//app config
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
@@ -28,6 +31,7 @@ app.use(methodOverride("_method"));
 app.engine('ejs',ejsMate);
 app.use(express.static(path.join(__dirname,"public")));``
 
+//session config
 const sessionOptions={
     secret:"mysupersecretcode",
     resave:false,
@@ -39,11 +43,20 @@ const sessionOptions={
 },
 };
 
-app.use(session(sessionOptions));
-
 app.get("/",(req,res)=>{
     res.send("root working");
 });
+
+//use session and flash
+app.use(session(sessionOptions));
+app.use(flash());
+
+//flash middleware
+app.use((req,res,next)=>{
+    res.locals.success=req.flash("success");
+    next();
+});
+
 
 //listings 
 app.use("/listings",listings);

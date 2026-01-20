@@ -1,6 +1,7 @@
 const mongoose=require("mongoose");
 const Schema=mongoose.Schema;
 const Review=require("./review.js");
+const { fileLoader } = require("ejs");
 
 const listingSchema=new Schema({
     title:{
@@ -9,7 +10,8 @@ const listingSchema=new Schema({
     },
     description:String,
     image:{
-    url: String,
+        url:String,
+        filename:String,
   },
     price:Number,
     location:String,

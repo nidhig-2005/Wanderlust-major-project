@@ -5,7 +5,8 @@
     <form method="POST" 
     action="/listings/<%=listing._id%>?_method=PUT" 
     novalidate 
-    class="needs-validation">
+    class="needs-validation"
+    enctype="multipart/form-data">
         
         <div class="mb-3">
             <lable for="title" class="form-label">Title</lable>

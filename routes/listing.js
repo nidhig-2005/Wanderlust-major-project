@@ -13,7 +13,7 @@ const listingsController=require("../controllers/listings.js");
 router
 .route("/")
 .get(wrapAsync(listingsController.index))
-.post(isLoggedIn,validateListing,upload.single('listing[image]'),
+.post(isLoggedIn,upload.single('listing[image]'),validateListing,
     wrapAsync(listingsController.createListing));
 
 //new route
@@ -23,7 +23,7 @@ router.get("/new",isLoggedIn,listingsController.newListingForm);
 router.route("/:id")
 .get(wrapAsync(listingsController.showListing))
 .put(
-    isLoggedIn,isOwner,validateListing,
+    isLoggedIn,isOwner,upload.single('listing[image]'),validateListing,
     wrapAsync(listingsController.updateListing))
 .delete(
     isLoggedIn,isOwner,wrapAsync(listingsController.destroyListing));

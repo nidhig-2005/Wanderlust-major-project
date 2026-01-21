@@ -51,11 +51,16 @@ module.exports.editListingForm=(async (req,res)=>{
 
 //update controller
 module.exports.updateListing=(async(req,res)=>{
-     if(!req.body.listing){
-        throw new ExpressError(400,"Send Valid Data for Listing");
-    }
     let {id}=req.params;
-    await Listing.findByIdAndUpdate(id,{...req.body.listing});
+    let listing=await Listing.findByIdAndUpdate(id,{...req.body.listing});
+    //updating image if new image is uploaded
+    if(typeof req.file !== "undefined"){
+        let url=req.file.path;
+        let filename=req.file.filename;
+        listing.image={url,filename};
+        await listing.save();
+    }
+    
     req.flash("success","Listing updated!");
     res.redirect(`/listings/${id}`);
 });

@@ -51,9 +51,9 @@ const sessionOptions={
 },
 };
 
-app.get("/",(req,res)=>{
-    res.send("root working");
-});
+// app.get("/",(req,res)=>{
+//     res.send("root working");
+// });
 
 //use session and flash
 app.use(session(sessionOptions));

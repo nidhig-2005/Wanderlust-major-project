@@ -32,4 +32,9 @@ The goal of this project is to demonstrate my understanding of **backend logic, 
 👉 **Live Project:"https://wanderlust-major-project-bw5r.onrender.com/listings"
 
 ---
+
+## 🎥 Demo Video
+▶️ https://youtu.be/wgTbywSh0FA?si=H2dJ7zDPfcmMTS6S
+
+---
 ⚠️ Note: The live link may take a few seconds to load as it is deployed on a free hosting service.

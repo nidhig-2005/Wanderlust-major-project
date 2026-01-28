@@ -6,12 +6,12 @@ const geocodingClient = mbxGeocoding({ accessToken: mapToken});
 //index controller
 module.exports.index=async (req,res)=>{
     const allListings=await Listing.find({});
-    res.render("listings/index.ejs",{allListings});
+    res.render("listings/index",{allListings});
     };
 
  //new controller
 module.exports.newListingForm=(req,res)=>{
-    res.render("listings/new.ejs");
+    res.render("listings/new");
     };
 
 // show controller
@@ -24,8 +24,8 @@ module.exports.showListing=(async (req,res)=>{
         req.flash("error","Listing not found");
         return res.redirect("/listings");
     }
-    console.log(listing);
-    res.render("listings/show.ejs",{listing});
+    listing.reviews=listing.reviews||[];
+        res.render("listings/show",{listing});
 });
 
 //Create controller
@@ -35,7 +35,6 @@ module.exports.createListing=(async (req,res,next)=>{
   limit: 1,
 })
   .send();
-  
 
     let url=req.file.path;
     let filename=req.file.filename;
@@ -52,31 +51,35 @@ module.exports.createListing=(async (req,res,next)=>{
 //edit controller
 module.exports.editListingForm=(async (req,res)=>{
      let {id}=req.params;
-    const listing=await Listing.findById(id);
+    const listing=await Listing.findById(d);
      if(!listing){
         req.flash("error","Listing not found");
         return res.redirect("/listings");
     }
-    let originalImageUrl=listing.image.url;
-    originalImageUrl=originalImageUrl.replace("/upload","/upload/w_250");
-    res.render("listings/edit.ejs",{listing,originalImageUrl});
+    let originalImageUrl="";
+    if(listing.image && listing.image.url){
+        originalImageUrl=listing.image.url.replace(
+            "/upload","/upload/w_250"
+        );
+    }
+    res.render("listings/edit",{listing,originalImageUrl});
 });
 
 //update controller
 module.exports.updateListing=(async(req,res)=>{
     let {id}=req.params;
-    let listing=await Listing.findByIdAndUpdate(id,{...req.body.listing});
+    let listing=await Listing.findByIdAndUpdate(id,{...req.body.listing},{new:true});
     //updating image if new image is uploaded
     if(typeof req.file !== "undefined"){
         let url=req.file.path;
         let filename=req.file.filename;
         listing.image={url,filename};
-        await listing.save();
+         await listing.save();
     }
-    
+   
     req.flash("success","Listing updated!");
     res.redirect(`/listings/${id}`);
-});
+})
 
 //delete controller
 module.exports.destroyListing=(async(req,res)=>{

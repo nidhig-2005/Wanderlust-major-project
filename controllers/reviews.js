@@ -9,6 +9,7 @@ console.log(newReview.author);
 listing.reviews.push(newReview);
 await newReview.save();
 await listing.save();
+console.log(listing.geometry);
 req.flash("success","Review added");
 res.redirect(`/listings/${listing._id}`);
 };

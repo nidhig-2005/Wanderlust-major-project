@@ -19,7 +19,7 @@ The goal of this project is to demonstrate my understanding of **backend logic, 
 
 ✨ Features
 - User authentication (Sign up / Login / Logout)
-- Role-based access (if applicable)
+- Role-based access
 - CRUD operations
 - Flash messages for user feedback
 - Responsive UI using Bootstrap

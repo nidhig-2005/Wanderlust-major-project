@@ -33,7 +33,7 @@ module.exports.renderLogin=(req,res)=>{
 //login post route
 module.exports.loginPostForm=async (req,res)=>{
     req.flash("success","Welcome back!");
-    let redirectUrl=res.locals.redirectUrl || "/listings";
+    let redirectUrl=res.locals.redirectUrl||"/listings";
     res.redirect(redirectUrl);
 };
 
@@ -42,7 +42,7 @@ module.exports.logoutUser=(req,res)=>{
     req.logout((err)=>{
         if(err){
             return next(err);
-        } 
+        }
         req.flash("success","You have logged out successfully!");
         res.redirect("/listings");
     });

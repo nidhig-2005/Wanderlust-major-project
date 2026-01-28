@@ -1,10 +1,5 @@
 require("dotenv").config();
 
-console.log("NODE_ENV:", process.env.NODE_ENV);
-console.log("SESSION_SECRET:", process.env.SESSION_SECRET);
-console.log("ATLASDB_URL:", process.env.ATLASDB_URL);
-
-
 const express= require("express");
 const app=express();
 const mongoose=require("mongoose");
@@ -67,7 +62,6 @@ const sessionOptions={
         expires:Date.now()+7*24*60*60*1000,
         maxAge:7*24*60*60*1000,
         httpOnly:true,
-        secure: true,
         sameSite:"lax"
 },
 };
@@ -87,7 +81,7 @@ passport.deserializeUser(User.deserializeUser());//how to get user from session
 app.use((req,res,next)=>{
     res.locals.success=req.flash("success");
     res.locals.error=req.flash("error");
-    res.locals.currentUser=req.user;
+    res.locals.currentUser=req.user||null;
     next();
 });
 

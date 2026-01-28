@@ -51,7 +51,7 @@ module.exports.createListing=(async (req,res,next)=>{
 //edit controller
 module.exports.editListingForm=(async (req,res)=>{
      let {id}=req.params;
-    const listing=await Listing.findById(d);
+    const listing=await Listing.findById(id);
      if(!listing){
         req.flash("error","Listing not found");
         return res.redirect("/listings");

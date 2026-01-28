@@ -7,7 +7,6 @@ const app=express();
 const mongoose=require("mongoose");
 const path=require("path");
 const methodOverride=require("method-override");
-// const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust";
 const dbUrl=process.env.ATLASDB_URL;
 
 const ejsMate=require("ejs-mate");
@@ -36,10 +35,6 @@ async function main(){
 
 console.log(process.env.ATLASDB_URL);
 
-const store=MongoStore.create({
-    mongoUrl:dbUrl,
-});
-
 //app config
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
@@ -49,6 +44,10 @@ app.engine('ejs',ejsMate);
 app.use(express.static(path.join(__dirname,"public")));
 
 
+const store=MongoStore.create({
+    mongoUrl:dbUrl,
+});
+
 store.on("error",()=>{
     console.log("ERROR IN MONGO SESSION STORE",err);
 });
@@ -56,7 +55,7 @@ store.on("error",()=>{
 //session config
 const sessionOptions={
     store:store,
-    secret:"mysupersecretcode",
+    secret:process.env.SESSION_SECRET,
     resave:false,
     saveUninitialized:false,
     cookie:{
@@ -65,11 +64,6 @@ const sessionOptions={
         httpOnly:true
 },
 };
-
-// app.get("/",(req,res)=>{
-//     res.send("root working");
-// });
-
 
 //use session and flash
 app.use(session(sessionOptions));

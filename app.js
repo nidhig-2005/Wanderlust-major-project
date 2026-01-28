@@ -1,6 +1,9 @@
-if(process.env.NODE_ENV!=="production"){
-    require("dotenv").config();
-};
+require("dotenv").config();
+
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("SESSION_SECRET:", process.env.SESSION_SECRET);
+console.log("ATLASDB_URL:", process.env.ATLASDB_URL);
+
 
 const express= require("express");
 const app=express();
@@ -48,9 +51,11 @@ const store=MongoStore.create({
     mongoUrl:dbUrl,
 });
 
-store.on("error",()=>{
+store.on("error",(err)=>{
     console.log("ERROR IN MONGO SESSION STORE",err);
 });
+
+app.set("trust proxy", 1);
 
 //session config
 const sessionOptions={
@@ -61,7 +66,9 @@ const sessionOptions={
     cookie:{
         expires:Date.now()+7*24*60*60*1000,
         maxAge:7*24*60*60*1000,
-        httpOnly:true
+        httpOnly:true,
+        secure: true,
+        sameSite:"lax"
 },
 };
 

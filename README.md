@@ -13,7 +13,7 @@ The goal of this project is to demonstrate my understanding of **backend logic, 
 - **Backend:** Node.js, Express.js
 - **Database:** MongoDB
 - **Authentication:** Passport.js
-- **Deployment:** Render / Railway / Vercel *(update if needed)*
+- **Deployment:** Render
 
 ---
 
